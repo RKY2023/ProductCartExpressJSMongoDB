@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie-edge">
+        <title> Book Call</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+    </head>
+    <body>
+        <div class="row">
+            <div class="col-6 border border-warning rounded">
+                <form action="#" onsubmit="onsignup(event)">
+                    <h1 class="fs-3 text-center">Book a call</h1>
+                    <h6 class="fd-4 text-center">Book a call slot and our representative will call you within 1hr of selected time.</h6>
+                    <hr>
+                    <label class="form-label mt-2">Name:</label>
+                    
+                    <input id="uname" class="form-control" type="text" name="username" required>
+                    
+                    <label class="form-label mt-2">Email:</label>
+                    
+                    <input id="emailId" class="form-control" type="text" name="email" required>
+                    
+                    <label class="form-label mt-2">Phone:</label>
+                    
+                    <input id="phno" class="form-control" type="number" name="Phoneno" required>
+                    
+                    <!-- <label class="form-label mt-2">Time for Call:</label>
+                    <div class="row g-1">
+                        <input class="col form-control" type="date" name="bookingdate">
+                        <input class="col form-control" type="time" name="bookingtime">
+                    </div> -->
+                    
+                    
+                    
+                    <input id="bookcall" class="btn btn-warning w-100 my-4" type="button" name="bookcall" value="Submit">
+                    
+                </form>
+            </div>
+            <ul id="userList"></ul>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+        <script>
+            var crudcrudBaseurl = 'https://crudcrud.com/api/0abeb82122064b759a5316c65aca6c1f/UserAppointmentDataSTR';
+            btn = document.getElementById("bookcall");
+            btn.addEventListener("click", function() {
+                upsertData();
+            });
+            setTimeout(getUserList(), 2000);
+            function upsertData(){
+                let uname = document.getElementById('uname').value;
+                let emailId = document.getElementById('emailId').value;
+                let phno = document.getElementById('phno').value;
+                userData = {
+                    'name': uname,
+                    'email': emailId,
+                    'phoneNo': phno
+                }
+                let btn = document.getElementById('bookcall');
+                if(btn.classList.contains('edit-btn')){
+                    axios
+                        .put(crudcrudBaseurl+'/'+btn.getAttribute('edit'),userData)
+                        .then(res => {
+                            console.log('Data updated')
+                            btn.removeAttribute('edit');
+                            btn.classList.remove('edit=btn');
+                            getUserList();
+                        })
+                        .catch(err => console.log('something went wrong'));
+                }else{
+                    axios
+                        .post(crudcrudBaseurl,userData)
+                        .then(res => {
+                            console.log('Data inserted')
+                            getUserList();
+                        })
+                        .catch(err => console.log('something went wrong'));
+                }
+                
+            }     
+            function getUserList(){
+                axios
+                    .get(crudcrudBaseurl)
+                    .then(res => {
+                        console.log('Data fetched');
+                        userListDOM(res);
+                    })
+                    .catch(err => console.log('something went wrong'));
+            }
+            function userListDOM(res){
+                userListElem = document.getElementById( 'userList' );
+                userListElem.innerHTML = '';
+                res.data.forEach(element => {
+                    if(element.name!=undefined){
+                        // div += '<li id="'+element._id+'">';
+                        //     div +='<label class="card-title p-3 mb-0 bg-dark text-white">'+element.name+' - '+element.email+' - '+element.phoneNo+'</label>';
+                        //     div +='<input type="button" class="p-3 bg-success text-white" name="eit" value="Edit" onclick="removeUser(this)">';
+                        //     div +='<input type="button" class="p-3 bg-danger text-white" name="sel" value="Delete" onclick="removeUser(this)">';
+                        // div +='</li>';
+                        blockElem = document.createElement( 'li' );
+                        blockElem.id = element._id;
+                        
+                        labelElem = document.createElement( 'label' );
+                        labelElem.className = 'card-title p-3 mb-0 bg-dark text-white';
+                        labelElem.innerHTML = element.name+' - '+element.email+' - '+element.phoneNo;
+                        inputElem1 = document.createElement( 'button' );
+                        inputElem1.className = 'p-3 bg-success text-white';
+                        inputElem1.innerHTML = 'edit';
+                        inputElem1.addEventListener('click', function t1() {
+                            editUser(element._id)
+                        });
+                        inputElem2 = document.createElement( 'button' );
+                        inputElem2.className = 'p-3 bg-danger text-white';
+                        inputElem2.innerHTML = 'Delete';
+                        inputElem2.addEventListener('click',function t2() {
+                            removeUser(element._id)
+                        });
+
+                                                
+                        blockElem.appendChild( labelElem );
+                        blockElem.appendChild( inputElem1 );
+                        blockElem.appendChild( inputElem2 );
+                        userListElem.appendChild( blockElem );
+                    }
+                });
+                var newElement = document.createElement("div");
+                newElement.innerHTML = div;
+                document.getElementById("userList").setHTML(newElement.innerHTML);
+            }
+            function removeUser(id){
+                axios
+                    .delete(crudcrudBaseurl+'/'+id)
+                    .then(res => {
+                        console.log('User Deleted');
+                        getUserList();
+                    })
+                    .catch(err => console.log('something went wrong'));
+
+            }
+            function editUser(id){
+                
+                axios
+                    .get(crudcrudBaseurl+'/'+id)
+                    .then(res => {
+                        console.log('User Detail fetched');
+                        document.getElementById('uname').value=res.data.name;
+                        document.getElementById('emailId').value=res.data.email;
+                        document.getElementById('phno').value=res.data.phoneNo;
+                        let btn = document.getElementById('bookcall');
+                        btn.setAttribute('edit',res.data._id);
+                        btn.classList.add('edit-btn');
+                    })
+                    .catch(err => console.log('something went wrong'));
+            }
+           
+        </script>
+    </body>
+</html>

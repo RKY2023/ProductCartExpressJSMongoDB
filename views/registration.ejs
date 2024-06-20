@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="row">
+        <div class="col-6 border border-warning rounded">
+            <form action="/user/add-user" method="post">
+                <h1 class="fs-3 text-center">Book a call</h1>
+                <h6 class="fd-4 text-center">Book a call slot and our representative will call you within 1hr of selected time.</h6>
+                <hr>
+                <label class="form-label mt-2">Name:</label>
+                
+                <input id="uname" class="form-control" type="text" name="username" required>
+                
+                <label class="form-label mt-2">Email:</label>
+                
+                <input id="emailId" class="form-control" type="text" name="email" required>
+                
+                <label class="form-label mt-2">Phone:</label>
+                
+                <input id="phno" class="form-control" type="number" name="phoneno" required>
+                
+                <!-- <label class="form-label mt-2">Time for Call:</label>
+                <div class="row g-1">
+                    <input class="col form-control" type="date" name="bookingdate">
+                    <input class="col form-control" type="time" name="bookingtime">
+                </div> -->
+                
+                
+                
+                <button id="bookcall" class="btn btn-warning w-100 my-4" type="submit" name="bookcall">submit</button>
+                
+            </form>
+        </div>
+        <% if (users.length > 0) { %>
+            <ul id="userList"></ul>
+                <% for (let user of users) { %>
+                    <li><div>
+                        <div><%= user.name %> </div>
+                        <form action="/user/delete-user" method="post">
+                            <button type="submit">delete</button>
+                            <input type="hidden" name="userId" value="<%= user.id %>" />
+                        </form>
+                    </div></li>
+                <% } %>
+        <% } %>
+        
+    </div>
+</body>
+</html>

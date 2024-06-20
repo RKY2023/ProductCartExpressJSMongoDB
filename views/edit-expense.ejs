@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie-edge">
+        <title> Expense Tracker</title>
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script> -->
+    </head>
+    <body>
+        <div class="container my-5" style="width: 50%">
+            <form action="/expense/update" method="post">
+                <h1>Expense Tracker</h1>
+                <h6>Enter your expenses below:</h6>
+                <hr>
+                <label>Expense category:</label>
+                <br/>
+                <input type="text" id="exp_cat" name="exp_cat" value="<%= expense.category %>">
+                <br/>
+                <label>Expense Amount:</label>
+                <br/>
+                <input type="number" id="exp_amt" name="exp_amt" value="<%= expense.amount %>">
+                <br/>
+                <label>Expense Description:</label>
+                <br/>
+                <input type="text" id="exp_desc" name="exp_desc" value="<%= expense.description %>">
+                <br/>
+                <button type="submit" id="exp_adder" class="btn btn-success mt-2">Update</button>
+                <input type="hidden" id="exp_cat" name="expenseId" value="<%= expense.id %>">
+            </form>
+        </div>
+        
+    </body>
+</html>
