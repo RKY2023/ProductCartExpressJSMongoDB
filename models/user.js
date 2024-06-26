@@ -58,6 +58,10 @@ class User {
     }
   }
 
+  getCart() {
+    return this.cart;
+  }
+
   static fetchAll() {
     const db = getDb();
     return db
